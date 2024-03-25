@@ -1,11 +1,11 @@
-import JourneyList from "@/components/JourneyList";
 import Post from "@/components/Post";
 import { postsData } from "@/data";
+import Link from "next/link";
 
-export default function Home() {
+export default function Dashboard() {
   return (
-    <>
-      <JourneyList />
+    <div>
+      <h1>My posts</h1>
       {postsData && postsData.length > 0 ? (
         postsData.map((post) => (
           <Post
@@ -22,8 +22,11 @@ export default function Home() {
           />
         ))
       ) : (
-        <div className="py-6">No posts</div>
+        <div className="py-6">
+          <div>No posts created yet.</div>
+          <Link className="underline" href={"/create-post"}>Create New</Link>
+        </div>
       )}
-    </>
+    </div>
   );
 }

@@ -8,7 +8,7 @@ export default function Navbar() {
             <p className="text-sm">Explore my Journey now! <br /> You only live once!</p>
         </div>
         <div className="flex items-center">
-            <Link className="btn" href={"/introduction"}>My introduction</Link>
+            <Link className="btn" href={"/sign-in"}>Sign in</Link>
         </div>
 
     </div>

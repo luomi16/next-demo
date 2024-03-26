@@ -1,3 +1,5 @@
+import SignInBtns from "@/components/SignInBtns";
+
 export default function Introduction() {
-    return <div>You could sign in here.</div>;
+    return <div><SignInBtns /></div>;
 }

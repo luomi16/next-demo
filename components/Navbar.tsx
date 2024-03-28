@@ -3,11 +3,29 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Navbar() {
   const { status, data: session } = useSession();
   const [isExpanded, setIsExpanded] = useState(false);
+  const popupRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+        setIsExpanded(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    if(!isExpanded) {
+      document.removeEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    }
+  }, [isExpanded]);
+
   const handleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
@@ -26,11 +44,26 @@ export default function Navbar() {
       {status === "authenticated" ? (
         <>
           {isExpanded && (
-            <div className="absolute z-30 right-0 top-20 bg-white p-6 shadow-lg rounded-md flex flex-col gap-2 text-right min-w-[160px]">
+            <div
+              ref={popupRef}
+              className="absolute z-30 right-0 top-20 bg-white p-6 shadow-lg rounded-md flex flex-col gap-2 text-right min-w-[160px]"
+            >
               <div className="font-bold">{session?.user?.name}</div>
               <div>{session?.user?.email}</div>
-              <Link href={"/dashboard"} className="hover:underline" onClick={handleExpanded}>Dashboard</Link>
-              <Link href={"/create-post"} className="hover:underline" onClick={handleExpanded}>Create Post</Link>
+              <Link
+                href={"/dashboard"}
+                className="hover:underline"
+                onClick={handleExpanded}
+              >
+                Dashboard
+              </Link>
+              <Link
+                href={"/create-post"}
+                className="hover:underline"
+                onClick={handleExpanded}
+              >
+                Create Post
+              </Link>
               <button className="btn" onClick={() => signOut()}>
                 Sign out
               </button>

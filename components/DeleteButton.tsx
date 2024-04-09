@@ -1,3 +1,32 @@
-export default function DeleteButton() {
-    return (<div><button className="text-red-600">delete</button></div>)
+"use client"
+
+export default function DeleteButton({ id }: { id: string }) {
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      "Are yoou sure you want to delete this post?"
+    );
+    if (confirmed) {
+      try {
+        const res = await fetch(`/api/posts/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+          },
+        });
+        if(res.ok) {
+            console.log("Post deleted.");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleDelete} className="text-red-600">
+        delete
+      </button>
+    </div>
+  );
 }

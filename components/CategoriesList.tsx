@@ -1,11 +1,11 @@
 import Link from "next/link";
 
-export type Category = {
+export type TCategory = {
     id: string;
     catName: string;
 }
 
-const getCategories = async(): Promise<Category[] | null> => {
+const getCategories = async(): Promise<TCategory[] | null> => {
     try {
         const res = await fetch(`${process.env.NEXTAUTH_URL}/api/categories/`);
         if(res.ok) {

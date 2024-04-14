@@ -1,11 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { TCategory } from "./CategoriesList";
-
 import { useRouter } from "next/navigation";
+import { TPost } from "@/app/page";
+import { TCategory } from "@/components/CategoriesList";
 
-export default function CreatePostForm() {
+export default function EditPostForm({ post }: { post: TPost }) {
   const [links, setLinks] = useState<string[]>([]);
   const [linkInput, setLinkInput] = useState("");
   const [title, setTitle] = useState("");
@@ -25,7 +25,25 @@ export default function CreatePostForm() {
       setCategories(catNames);
     };
     fetchAllCategories();
-  }, []);
+
+    const initValues = () => {
+      setTitle(post.title);
+      setContent(post.content);
+      setImageUrl(post.imageUrl || "");
+      setPublickId(post.publicId || "");
+      setSelectedCategory(post.catName || "");
+      setLinks(post.links || [])
+    };
+
+    initValues();
+  }, [
+    post.title,
+    post.content,
+    post.imageUrl,
+    post.publicId,
+    post.catName,
+    post.links
+  ]);
 
   const addLink = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
@@ -47,8 +65,8 @@ export default function CreatePostForm() {
     }
 
     try {
-      const res = await fetch("/api/posts/", {
-        method: "POST",
+      const res = await fetch(`/api/posts/${post.id}`, {
+        method: "PUT",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({
           title,
@@ -59,24 +77,28 @@ export default function CreatePostForm() {
           publickId,
         }),
       });
-      if(res.ok) {
+      if (res.ok) {
         router.push("/dashboard");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div>
-      <h2>Create Post</h2>
+      <h2>Update Post</h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-2">
         <input
           onChange={(e) => setTitle(e.target.value)}
           type="text"
           placeholder="Title"
+          value={title}
         />
         <textarea
           onChange={(e) => setContent(e.target.value)}
           placeholder="Content"
+          value={content}
         ></textarea>
         {links &&
           links.map((link, i) => (
@@ -141,8 +163,10 @@ export default function CreatePostForm() {
         <select
           onChange={(e) => setSelectedCategory(e.target.value)}
           className="p-3 rounded-md border appearance-none"
+          value={selectedCategory}
         >
           <option value="">Select A Category</option>
+
           {categories &&
             categories.map((category) => (
               <option key={category.id} value={category.catName}>
@@ -151,7 +175,7 @@ export default function CreatePostForm() {
             ))}
         </select>
         <button className="primary-btn" type="submit">
-          Create Post
+          Update Post
         </button>
         {error && <div className="p-2 text-red-500 font-bold">{error}</div>}
       </form>

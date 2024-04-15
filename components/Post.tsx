@@ -72,8 +72,9 @@ export default async function Post({
           {category}
         </Link>
       )}
+      <Link href={`${process.env.NEXTAUTH_URL}/post/${id}`}>
       <h2>{title}</h2>
-      <p className="content">{content}</p>
+      <p className="content">{content}</p></Link>
       {links && (
         <div className="my-4 flex flex-col gap-3">
           {links.map((link, index) => (

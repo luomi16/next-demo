@@ -13,7 +13,7 @@ export default function CreatePostForm() {
   const [categories, setCategories] = useState<TCategory[]>([]);
   const [imageUrl, setImageUrl] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [publickId, setPublickId] = useState("");
+  const [publicId, setPublicId] = useState("");
   const [error, setError] = useState("");
 
   const router = useRouter();
@@ -56,13 +56,15 @@ export default function CreatePostForm() {
           links,
           selectedCategory,
           imageUrl,
-          publickId,
+          publicId,
         }),
       });
-      if(res.ok) {
+      if (res.ok) {
         router.push("/dashboard");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

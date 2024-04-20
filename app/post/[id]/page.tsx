@@ -1,6 +1,9 @@
 import { TPost } from "@/app/page";
 import Post from "@/components/Post";
 import Comment from "@/components/Comment";
+import CreateComment from "@/components/CreateComment";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export type TComment = {
   id: string;
@@ -14,6 +17,7 @@ export type TComment = {
   replies: TComment[];
   createdAt: string;
   updatedAt: string;
+  authorId: string;
   author: string;
 };
 
@@ -59,6 +63,8 @@ export default async function PostPage({
   const id = params.id;
   const post = await getPost(id);
   const comments = await getComments(id);
+  const session = await getServerSession(authOptions);
+  const isEditable = session;
 
   return (
     <>
@@ -67,7 +73,7 @@ export default async function PostPage({
           <Post
             key={post.id}
             id={post.id}
-            author={""}
+            author={"Mi L"}
             authorEmail={post.authorEmail}
             date={post.createdAt}
             title={post.title}
@@ -76,7 +82,9 @@ export default async function PostPage({
             content={post.content}
             links={post.links || []}
           />
-          <h1>Comments</h1>
+
+          {isEditable && <CreateComment postId={post.id} />}
+
           {comments && comments.length > 0 ? (
             comments.map((comment) => (
               <Comment
@@ -90,7 +98,9 @@ export default async function PostPage({
               />
             ))
           ) : (
-            <div className="py-6">No comments yet. Be the first to comment!</div>
+            <div className="py-6">
+              No comments yet. Be the first to comment!
+            </div>
           )}
         </>
       ) : (

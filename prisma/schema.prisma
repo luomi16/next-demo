@@ -49,6 +49,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
+  comments      Comment[]
 }
 
 model VerificationToken {
@@ -70,9 +71,10 @@ model Post {
   category    Category? @relation(fields: [catName], references: [catName])
   author      User      @relation(fields: [authorEmail], references: [email])
   authorEmail String
-  links String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  links       String[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  comments    Comment[]
 }
 
 model Category {
@@ -80,4 +82,23 @@ model Category {
   catName String   @unique
   posts   Post[]
   postIDs String[] @db.ObjectId
+}
+
+model Comment {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  content         String
+  likeNum         Int       @default(0)
+  quote           String?
+  parentCommentId String?   @db.ObjectId
+  parentComment   Comment?  @relation("CommentReplies", fields: [parentCommentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies         Comment[] @relation("CommentReplies")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  author      User?      @relation(fields: [authorEmail], references: [email])
+  authorId      String   @db.ObjectId
+  authorEmail String?
+
+  post   Post  @relation(fields: [postId], references: [id], onDelete: NoAction)
+  postId String @db.ObjectId
 }

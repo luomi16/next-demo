@@ -1,10 +1,13 @@
-import Comments from "@/components/Comments";
+import CommentsSection from "@/components/CommentsSection";
+import PostComment from "@/components/CommentsSection/postComment";
 
 export default function CommentsPage() {
 
   return (
     <div>
-      <Comments />
+      {/* <CommentsList /> */}
+      <PostComment />
+      <CommentsSection />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Post from "@/components/Post";
+import Comments from "@/components/Comments";
 
 const getPost = async (id: string): Promise<TPost | null> => {
   try {
@@ -20,8 +21,8 @@ const getPost = async (id: string): Promise<TPost | null> => {
 };
 
 export default async function PostPage({ params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("sign-in");
+  // const session = await getServerSession(authOptions);
+  // if (!session) redirect("sign-in");
 
   const id = params.id;
 
@@ -30,18 +31,21 @@ export default async function PostPage({ params }: { params: { id: string } }) {
   return (
     <>
       {post ? (
-        <Post
-          key={post.id}
-          id={post.id}
-          author={""}
-          authorEmail={post.authorEmail}
-          date={post.createdAt}
-          title={post.title}
-          thumbnail={post.imageUrl}
-          category={post.catName}
-          content={post.content}
-          links={post.links || []}
-        />
+        <>
+          <Post
+            key={post.id}
+            id={post.id}
+            author={""}
+            authorEmail={post.authorEmail}
+            date={post.createdAt}
+            title={post.title}
+            thumbnail={post.imageUrl}
+            category={post.catName}
+            content={post.content}
+            links={post.links || []}
+          />
+          <Comments params={{ postId: id }} />
+        </>
       ) : (
         <div>Invalid Post</div>
       )}

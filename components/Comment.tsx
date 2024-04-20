@@ -1,7 +1,8 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-// import { TPost } from "@/app/page";
-// import { TComment } from "@/components/Comments";
+import { TPost } from "@/app/page";
+import { TComment } from "@/app/post/[id]/page";
+
 
 interface CommentProps {
     id: string;

@@ -4,11 +4,11 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function POST(req: Request) {
-  // //   const session = await getServerSession(authOptions);
+  //   const session = await getServerSession(authOptions);
 
-  // //   if (!session) {
-  // //     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  // //   }
+  //   if (!session) {
+  //     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  //   }
   //   const authorId = session?.user?.id as string;
 
   const { content, postId, authorId, quote } = await req.json();
@@ -36,6 +36,7 @@ export async function POST(req: Request) {
   }
 }
 
+// Get all comments
 // export async function GET(req: Request) {
 //   try {
 //     const comments = await prisma.comment.findMany({

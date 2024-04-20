@@ -1,9 +1,21 @@
 import { TPost } from "@/app/page";
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Post from "@/components/Post";
-import Comments from "@/components/Comments";
+import Comment from "@/components/Comment";
+
+export type TComment = {
+  id: string;
+  content: string;
+  likeNum: number;
+  quote?: string;
+  postId: string;
+  post: TPost;
+  parentCommentId?: string;
+  parentComment?: TComment;
+  replies: TComment[];
+  createdAt: string;
+  updatedAt: string;
+  author: string;
+};
 
 const getPost = async (id: string): Promise<TPost | null> => {
   try {
@@ -20,13 +32,33 @@ const getPost = async (id: string): Promise<TPost | null> => {
   return null;
 };
 
-export default async function PostPage({ params }: { params: { id: string } }) {
-  // const session = await getServerSession(authOptions);
-  // if (!session) redirect("sign-in");
+// Get Comments by postId
+const getComments = async (postId: string): Promise<TComment[] | null> => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/comments/?postId=${postId}`,
+      {
+        cache: "no-store",
+      }
+    );
+    if (res.ok) {
+      const comments = await res.json();
+      return comments;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return null;
+};
 
+export default async function PostPage({
+  params,
+}: {
+  params: { id: string; postId: string };
+}) {
   const id = params.id;
-
   const post = await getPost(id);
+  const comments = await getComments(id);
 
   return (
     <>
@@ -44,7 +76,22 @@ export default async function PostPage({ params }: { params: { id: string } }) {
             content={post.content}
             links={post.links || []}
           />
-          <Comments params={{ postId: id }} />
+          <h1>Comments</h1>
+          {comments && comments.length > 0 ? (
+            comments.map((comment) => (
+              <Comment
+                key={comment.id}
+                id={comment.id}
+                content={comment.content}
+                likeNum={comment.likeNum}
+                quote={comment.quote}
+                createdAt={comment.createdAt}
+                author={comment.author}
+              />
+            ))
+          ) : (
+            <div className="py-6">No comments yet. Be the first to comment!</div>
+          )}
         </>
       ) : (
         <div>Invalid Post</div>

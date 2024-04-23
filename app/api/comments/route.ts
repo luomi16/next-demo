@@ -9,12 +9,10 @@ export async function POST(req: Request) {
   if (!session) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
-  const authorId = "66050fa36dd1d631fa66fb6c";
-
   const authorEmail = session?.user?.email as string;
   // const authorId = session?.user?.id as string;
 
-  if (!authorEmail || !authorId) {
+  if (!authorEmail) {
     throw new Error("Required user information is missing.");
   }
 
@@ -32,7 +30,6 @@ export async function POST(req: Request) {
         content,
         postId,
         authorEmail,
-        authorId,
         quote,
       },
     });

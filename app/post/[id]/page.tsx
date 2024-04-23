@@ -18,7 +18,7 @@ export type TComment = {
   replies: TComment[];
   createdAt: string;
   updatedAt: string;
-  authorId: string;
+  // authorId: string;
   authorEmail: string;
 };
 
@@ -97,7 +97,7 @@ export default async function PostPage({
                 likeNum={comment.likeNum}
                 quote={comment.quote}
                 createdAt={comment.createdAt}
-                authorId={comment.authorId}
+                // authorId={comment.authorId}
                 authorEmail={comment.authorEmail}
               />
             ))

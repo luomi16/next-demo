@@ -1,15 +1,10 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { TPost } from "@/app/page";
-import { TComment } from "@/app/post/[id]/page";
-
 interface CommentProps {
   id: string;
   content: string;
   likeNum: number;
   quote?: string;
   createdAt: string;
-  authorId: string;
+  // authorId: string;
   authorEmail: string;
 }
 
@@ -20,7 +15,6 @@ export default async function Comment({
   likeNum,
   quote,
   createdAt,
-  authorId,
 }: CommentProps) {
   const dataObject = new Date(createdAt);
   const options: Intl.DateTimeFormatOptions = {
@@ -29,7 +23,7 @@ export default async function Comment({
     year: "numeric",
   };
 
-  const formatttedDate = dataObject.toLocaleDateString("en-US", options);
+  const formattedDate = dataObject.toLocaleDateString("en-US", options);
 
   return (
     <div key={id} className="mb-2 p-2">
@@ -39,7 +33,7 @@ export default async function Comment({
         ) : (
           <p className="text-lg font-semibold">An anonymous user</p>
         )}
-        <p className="text-xs text-gray-400 ml-4 mt-1.5">{formatttedDate}</p>
+        <p className="text-xs text-gray-400 ml-4 mt-1.5">{formattedDate}</p>
       </div>
       {quote && (
         <p className="flex items-start space-x-2">

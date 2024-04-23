@@ -29,8 +29,6 @@ export default async function Comment({
     year: "numeric",
   };
 
-  // console.log(authorEmail);
-
   const formatttedDate = dataObject.toLocaleDateString("en-US", options);
 
   return (

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { TCategory } from "./CategoriesList";
 
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function CreatePostForm() {
   const [links, setLinks] = useState<string[]>([]);
@@ -14,7 +15,7 @@ export default function CreatePostForm() {
   const [imageUrl, setImageUrl] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [publicId, setPublicId] = useState("");
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   const router = useRouter();
 
@@ -42,7 +43,9 @@ export default function CreatePostForm() {
     e.preventDefault();
 
     if (!title || !content) {
-      setError("Title and content are required.");
+      // setError("Title and content are required.");
+      const errorMessage = "Title and content are required.";
+      toast.error(errorMessage);
       return;
     }
 
@@ -60,7 +63,11 @@ export default function CreatePostForm() {
         }),
       });
       if (res.ok) {
+        toast.success("Post created successfully.")
         router.push("/dashboard");
+        router.refresh();
+      } else {
+        toast.error("Something weng wrong.");
       }
     } catch (error) {
       console.log(error);
@@ -155,7 +162,7 @@ export default function CreatePostForm() {
         <button className="primary-btn" type="submit">
           Create Post
         </button>
-        {error && <div className="p-2 text-red-500 font-bold">{error}</div>}
+        {/* {error && <div className="p-2 text-red-500 font-bold">{error}</div>} */}
       </form>
     </div>
   );

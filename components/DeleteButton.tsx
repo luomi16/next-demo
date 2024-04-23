@@ -1,9 +1,13 @@
 "use client"
 
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 export default function DeleteButton({ id }: { id: string }) {
+  const router = useRouter();
   const handleDelete = async () => {
     const confirmed = window.confirm(
-      "Are yoou sure you want to delete this post?"
+      "Are you sure you want to delete this post?"
     );
     if (confirmed) {
       try {
@@ -15,8 +19,11 @@ export default function DeleteButton({ id }: { id: string }) {
         });
         if(res.ok) {
             console.log("Post deleted.");
+            toast.success("Post deleted successfully.");
+            router.refresh();
         }
       } catch (error) {
+        toast.error("Something weng wrong.")
         console.log(error);
       }
     }

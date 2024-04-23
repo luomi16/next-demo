@@ -4,14 +4,21 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function POST(req: Request) {
-  //   const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-  //   if (!session) {
-  //     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  //   }
-  //   const authorId = session?.user?.id as string;
+  if (!session) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+  const authorId = "66050fa36dd1d631fa66fb6c";
 
-  const { content, postId, authorId, quote } = await req.json();
+  const authorEmail = session?.user?.email as string;
+  // const authorId = session?.user?.id as string;
+
+  if (!authorEmail || !authorId) {
+    throw new Error("Required user information is missing.");
+  }
+
+  const { content, postId, quote } = await req.json();
 
   if (!content) {
     return NextResponse.json(
@@ -24,6 +31,7 @@ export async function POST(req: Request) {
       data: {
         content,
         postId,
+        authorEmail,
         authorId,
         quote,
       },
@@ -64,17 +72,15 @@ export async function GET(req: Request) {
     const postId = url.searchParams.get("postId");
 
     if (!postId) {
-      return new NextResponse(
-        JSON.stringify({ error: "storyId is required" }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return new NextResponse(JSON.stringify({ error: "postId is required" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
     }
     const comments = await prisma.comment.findMany({
       where: { postId: postId },
-      include: { author: { select: { name: true } } },
+      // include: { author: { select: { name: true } } },
+      include: { author: true },
       orderBy: {
         createdAt: "desc",
       },
@@ -83,7 +89,7 @@ export async function GET(req: Request) {
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { message: "Some error occured" },
+      { message: "Failed to fetch comments." },
       { status: 500 }
     );
   }

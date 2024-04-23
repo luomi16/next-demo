@@ -4,6 +4,7 @@ import Comment from "@/components/Comment";
 import CreateComment from "@/components/CreateComment";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import Dropdown from "@/components/Comments/dropdown";
 
 export type TComment = {
   id: string;
@@ -18,7 +19,7 @@ export type TComment = {
   createdAt: string;
   updatedAt: string;
   authorId: string;
-  author: string;
+  authorEmail: string;
 };
 
 const getPost = async (id: string): Promise<TPost | null> => {
@@ -85,6 +86,8 @@ export default async function PostPage({
 
           {isEditable && <CreateComment postId={post.id} />}
 
+          <Dropdown />
+
           {comments && comments.length > 0 ? (
             comments.map((comment) => (
               <Comment
@@ -94,7 +97,8 @@ export default async function PostPage({
                 likeNum={comment.likeNum}
                 quote={comment.quote}
                 createdAt={comment.createdAt}
-                author={comment.author}
+                authorId={comment.authorId}
+                authorEmail={comment.authorEmail}
               />
             ))
           ) : (

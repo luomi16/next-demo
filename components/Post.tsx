@@ -41,7 +41,14 @@ export default async function Post({
   return (
     <div className="my-4 border-b border-b-300 py-8">
       <div className="mb-4">
-        {author ? (<>Posted by: <span className="font-bold">{author}</span> on {formatttedDate}</>) : <>Posted on {formatttedDate}</>}
+        {author ? (
+          <>
+            Posted by: <span className="font-bold">{author}</span> on{" "}
+            {formatttedDate}
+          </>
+        ) : (
+          <>Posted on {formatttedDate}</>
+        )}
       </div>
       <div className="w-full h-72 relative">
         {thumbnail ? (
@@ -71,8 +78,9 @@ export default async function Post({
         </Link>
       )}
       <Link href={`${process.env.NEXTAUTH_URL}/post/${id}`}>
-      <h2>{title}</h2>
-      <p className="content">{content}</p></Link>
+        <h2>{title}</h2>
+      </Link>
+      <p className="content">{content}</p>
       {links && (
         <div className="my-4 flex flex-col gap-3">
           {links.map((link, index) => (

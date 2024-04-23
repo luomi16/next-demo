@@ -8,7 +8,7 @@ export default function CreateComment({ postId }: { postId: string }) {
   const [error, setError] = useState("");
 
   const router = useRouter();
-  console.log(postId);
+  // console.log(postId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

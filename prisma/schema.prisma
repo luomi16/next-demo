@@ -94,11 +94,8 @@ model Comment {
   replies         Comment[] @relation("CommentReplies")
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-
   author      User?   @relation(fields: [authorEmail], references: [email])
-  // authorId    String  @db.ObjectId
-  authorEmail String?
-
+  authorEmail String
   post   Post   @relation(fields: [postId], references: [id], onDelete: NoAction)
   postId String @db.ObjectId
 }

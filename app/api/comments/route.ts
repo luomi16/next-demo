@@ -10,7 +10,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
   const authorEmail = session?.user?.email as string;
-  // const authorId = session?.user?.id as string;
 
   if (!authorEmail) {
     throw new Error("Required user information is missing.");

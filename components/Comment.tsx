@@ -4,7 +4,6 @@ interface CommentProps {
   likeNum: number;
   quote?: string;
   createdAt: string;
-  // authorId: string;
   authorEmail: string;
 }
 

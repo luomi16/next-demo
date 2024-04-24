@@ -3,8 +3,7 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
-import { NextAuthOptions } from "next-auth";
-import NextAuth from "next-auth/next";    
+import NextAuth from "next-auth";    
 
 import prisma from "@/lib/prismadb";
 

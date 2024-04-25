@@ -1,25 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prismadb";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/lib/prismadb';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/utils/authOptions';
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }
   const authorEmail = session?.user?.email as string;
 
   if (!authorEmail) {
-    throw new Error("Required user information is missing.");
+    throw new Error('Required user information is missing.');
   }
 
   const { content, postId, quote } = await req.json();
 
   if (!content) {
     return NextResponse.json(
-      { error: "Content are required." },
+      { error: 'Content are required.' },
       { status: 500 }
     );
   }
@@ -32,11 +32,11 @@ export async function POST(req: Request) {
         quote,
       },
     });
-    console.log("New comment created");
+    console.log('New comment created');
     return NextResponse.json(newComment);
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ message: "Could not create comment." });
+    return NextResponse.json({ message: 'Could not create comment.' });
   }
 }
 
@@ -65,12 +65,12 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
-    const postId = url.searchParams.get("postId");
+    const postId = url.searchParams.get('postId');
 
     if (!postId) {
-      return new NextResponse(JSON.stringify({ error: "postId is required" }), {
+      return new NextResponse(JSON.stringify({ error: 'postId is required' }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
       });
     }
     const comments = await prisma.comment.findMany({
@@ -78,14 +78,14 @@ export async function GET(req: Request) {
       // include: { author: { select: { name: true } } },
       include: { author: true },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
     });
     return NextResponse.json(comments);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { message: "Failed to fetch comments." },
+      { message: 'Failed to fetch comments.' },
       { status: 500 }
     );
   }

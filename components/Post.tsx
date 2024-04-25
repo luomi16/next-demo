@@ -1,8 +1,8 @@
-import Image from "next/image";
-import Link from "next/link";
-import DeleteButton from "./DeleteButton";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import Image from 'next/image';
+import Link from 'next/link';
+import DeleteButton from './DeleteButton';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/utils/authOptions';
 
 interface PostProps {
   id: string;
@@ -31,19 +31,19 @@ export default async function Post({
   const isEditable = session && session?.user?.email === authorEmail;
   const dataObject = new Date(date);
   const options: Intl.DateTimeFormatOptions = {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
   };
 
-  const formatttedDate = dataObject.toLocaleDateString("en-US", options);
+  const formatttedDate = dataObject.toLocaleDateString('en-US', options);
 
   return (
     <div className="my-4 border-b border-b-300 py-8">
       <div className="mb-4">
         {author ? (
           <>
-            Posted by: <span className="font-bold">{author}</span> on{" "}
+            Posted by: <span className="font-bold">{author}</span> on{' '}
             {formatttedDate}
           </>
         ) : (
@@ -61,7 +61,7 @@ export default async function Post({
         ) : (
           <Image
             src={
-              "https://github.com/Godsont/Tech-News-Starter-Files/blob/main/public/thumbnail-placeholder.png?raw=true"
+              'https://github.com/Godsont/Tech-News-Starter-Files/blob/main/public/thumbnail-placeholder.png?raw=true'
             }
             alt={title}
             fill

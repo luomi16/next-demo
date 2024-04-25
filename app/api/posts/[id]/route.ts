@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import prisma from "@/lib/prismadb";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prismadb';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/utils/authOptions';
 
 // Get posts by id
 export async function GET(
@@ -14,7 +14,7 @@ export async function GET(
     return NextResponse.json(post);
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ message: "Could not fetch post" });
+    return NextResponse.json({ message: 'Could not fetch post' });
   }
 }
 
@@ -26,7 +26,7 @@ export async function PUT(
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }
   const { title, content, links, selectedCategory, imageUrl, publicId } =
     await req.json();
@@ -46,7 +46,7 @@ export async function PUT(
     return NextResponse.json(post);
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ message: "Error editing post" });
+    return NextResponse.json({ message: 'Error editing post' });
   }
 }
 
@@ -58,7 +58,7 @@ export async function DELETE(
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }
   const id = params.id;
   try {
@@ -66,6 +66,6 @@ export async function DELETE(
     return NextResponse.json(post);
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ message: "Error deleting the post" });
+    return NextResponse.json({ message: 'Error deleting the post' });
   }
 }

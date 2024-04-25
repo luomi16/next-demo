@@ -13,21 +13,23 @@ export type TPost = {
   authorEmail: string;
   author: {
     name: string;
-  }
-}
+  };
+};
 
 // Get all posts
-const getPosts = async ():Promise<TPost[] | null> => {
+const getPosts = async (): Promise<TPost[] | null> => {
   try {
-    const res = await fetch(`${process.env.NEXTAUTH_URL}/api/posts`, {
+    const res = await fetch(`http://localhost:3000/api/posts`, {
       cache: "no-store",
     });
     if (res.ok) {
       const posts = await res.json();
       return posts;
+    } else {
+      throw new Error(`Failed to fetch posts: ${res.status} ${res.statusText}`);
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching posts:", error);
   }
   return null;
 };

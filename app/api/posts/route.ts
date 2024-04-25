@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/lib/prismadb";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/lib/prismadb';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/utils/authOptions';
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }
 
   const { title, content, links, selectedCategory, imageUrl, publicId } =
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
   if (!title || !content) {
     return NextResponse.json(
-      { error: "Title and content are required." },
+      { error: 'Title and content are required.' },
       { status: 500 }
     );
   }
@@ -33,11 +33,11 @@ export async function POST(req: Request) {
         authorEmail,
       },
     });
-    console.log("Post created");
+    console.log('Post created');
     return NextResponse.json(newPost);
   } catch (error) {
     console.log(error);
-    return NextResponse.json({ message: "Could not create post." });
+    return NextResponse.json({ message: 'Could not create post.' });
   }
 }
 
@@ -46,14 +46,14 @@ export async function GET() {
     const posts = await prisma.post.findMany({
       include: { author: { select: { name: true } } },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
     });
     return NextResponse.json(posts);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { message: "Some error occured" },
+      { message: 'Some error occured' },
       { status: 500 }
     );
   }

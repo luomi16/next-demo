@@ -1,10 +1,10 @@
-import { TPost } from "@/app/page";
-import Post from "@/components/Post";
-import Comment from "@/components/Comment";
-import CreateComment from "@/components/CreateComment";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import Dropdown from "@/components/Comments/dropdown";
+import { TPost } from '@/app/page';
+import Post from '@/components/Post';
+import Comment from '@/components/Comment';
+import CreateComment from '@/components/CreateComment';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/utils/authOptions';
+import Dropdown from '@/components/Comments/dropdown';
 
 export type TComment = {
   id: string;
@@ -24,7 +24,7 @@ export type TComment = {
 const getPost = async (id: string): Promise<TPost | null> => {
   try {
     const res = await fetch(`${process.env.NEXTAUTH_URL}/api/posts/${id}`, {
-      cache: "no-store",
+      cache: 'no-store',
     });
     if (res.ok) {
       const post = await res.json();
@@ -42,7 +42,7 @@ const getComments = async (postId: string): Promise<TComment[] | null> => {
     const res = await fetch(
       `${process.env.NEXTAUTH_URL}/api/comments/?postId=${postId}`,
       {
-        cache: "no-store",
+        cache: 'no-store',
       }
     );
     if (res.ok) {
@@ -73,7 +73,7 @@ export default async function PostPage({
           <Post
             key={post.id}
             id={post.id}
-            author={"Mi L"}
+            author={'Mi L'}
             authorEmail={post.authorEmail}
             date={post.createdAt}
             title={post.title}
